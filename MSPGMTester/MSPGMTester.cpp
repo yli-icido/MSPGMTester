@@ -55,6 +55,8 @@ int _tmain( int argc, _TCHAR* argv[] )
                 if ( receiver->connect() != PGM_SUCCESS )
                     break;
 
+                receiver->receive();
+
                 if ( receiver->shutdown() != PGM_SUCCESS )
                     break;
 

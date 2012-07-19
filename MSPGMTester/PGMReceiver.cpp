@@ -51,11 +51,15 @@ int PGMReceiver::connect()
 
     do
     {
-        SOCKET        s;
         SOCKADDR_IN   salocal, sasession;
         int           sasessionsz, dwSessionPort;
 
-        s = socket (AF_INET, SOCK_RDM, IPPROTO_RM);
+        SOCKET s = socket (AF_INET, SOCK_RDM, IPPROTO_RM);
+        if ( s == INVALID_SOCKET )
+        {
+            fprintf (stderr, "socket() failed: Error = %d\n", WSAGetLastError());
+            break;
+        }
 
         //
         // The bind port (dwSessionPort) specified should match that
@@ -66,16 +70,29 @@ int PGMReceiver::connect()
         salocal.sin_port   = htons (dwSessionPort);    
         salocal.sin_addr.s_addr = inet_addr ("234.5.6.7");
 
-        bind (s, (SOCKADDR *)&salocal, sizeof(salocal));
+        if ( !bind (s, (SOCKADDR *)&salocal, sizeof(salocal)) )
+        {
+            fprintf (stderr, "bind() failed: Error = %d\n", WSAGetLastError());
+            break;
+        }
 
         //
         // Set all relevant receiver socket options here
         //
 
-        listen (s, 10);
+        if ( !listen (s, 10) )
+        {
+            fprintf (stderr, "listen() failed: Error = %d\n", WSAGetLastError());
+            break;
+        }
 
         sasessionsz = sizeof(sasession);
         mClientSocket = accept (s, (SOCKADDR *)&sasession, &sasessionsz);
+        if ( mClientSocket ==  INVALID_SOCKET )
+        {
+            fprintf (stderr, "accept() failed: Error = %d\n", WSAGetLastError());
+            break;
+        }
 
         //
         // accept will return the client socket and we are now ready
