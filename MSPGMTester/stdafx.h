@@ -13,8 +13,7 @@
 #include <string>
 #include <map>
 #include <vector>
-#include <winsock.h>
-// #include <Winsock2.h>
+#include <winsock2.h>
 #include <Wsrm.h>
 
 #include "common.h"
