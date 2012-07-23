@@ -228,7 +228,7 @@ int PGMSender::createSocket()
         salocal.sin_port   = htons (0);    // Port is ignored here
         salocal.sin_addr.s_addr = htonl (INADDR_ANY);
 
-        if ( !bind (mSocket, (SOCKADDR *)&salocal, sizeof(salocal)) )
+        if ( bind (mSocket, (SOCKADDR *)&salocal, sizeof(salocal)) )
         {
             fprintf (stderr, "bind() failed: Error = %d\n", WSAGetLastError());
             break;
@@ -249,7 +249,7 @@ int PGMSender::createSocket()
         sasession.sin_port   = htons (dwSessionPort);
         sasession.sin_addr.s_addr = inet_addr ( PGM_MULTICAST_ADDRESS.c_str() );
 
-        if ( !::connect (mSocket, (SOCKADDR *)&sasession, sizeof(sasession)) )
+        if ( ::connect (mSocket, (SOCKADDR *)&sasession, sizeof(sasession)) )
         {
             fprintf (stderr, "connect() failed: Error = %d\n", WSAGetLastError());
             break;
