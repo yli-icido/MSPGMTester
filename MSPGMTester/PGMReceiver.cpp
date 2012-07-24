@@ -240,8 +240,8 @@ int PGMReceiver::connect()
         SOCKADDR_IN   salocal, sasession;
         int           sasessionsz;
 
-        SOCKET s = socket (AF_INET, SOCK_RDM, IPPROTO_RM);
-        if ( s == INVALID_SOCKET )
+        SOCKET sock = socket (AF_INET, SOCK_RDM, IPPROTO_RM);
+        if ( sock == INVALID_SOCKET )
         {
             fprintf (stderr, "socket() failed: Error = %d\n", WSAGetLastError());
             break;
@@ -254,7 +254,7 @@ int PGMReceiver::connect()
         salocal.sin_family = AF_INET;
         salocal.sin_port   = htons( mPort );    
         salocal.sin_addr.s_addr = inet_addr( PGM_MULTICAST_ADDRESS.c_str() );
-        int errCode = bind (s, (SOCKADDR *)&salocal, sizeof(salocal));
+        int errCode = bind (sock, (SOCKADDR *)&salocal, sizeof(salocal));
         if ( errCode == SOCKET_ERROR )
         {
             fprintf (stderr, "bind() failed: Error = %d\n", WSAGetLastError());
@@ -264,15 +264,19 @@ int PGMReceiver::connect()
         //
         // Set all relevant receiver socket options here
         //
-        errCode = listen (s, 10);
+        errCode = listen (sock, 10);
         if ( errCode == SOCKET_ERROR )
         {
             fprintf (stderr, "listen() failed: Error = %d\n", WSAGetLastError());
             break;
         }
+        
+        ULONG localif = inet_addr("157.124.22.104");
+
+        setsockopt(sock, IPPROTO_RM, RM_ADD_RECEIVE_IF, (char *)&localif, sizeof(localif));
 
         sasessionsz = sizeof(sasession);
-        mClientSocket = accept (s, (SOCKADDR *)&sasession, &sasessionsz);
+        mClientSocket = accept (sock, (SOCKADDR *)&sasession, &sasessionsz);
         if ( mClientSocket ==  INVALID_SOCKET )
         {
             fprintf (stderr, "accept() failed: Error = %d\n", WSAGetLastError());

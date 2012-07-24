@@ -8,7 +8,7 @@ const int PGM_INVALID_PARAMS = 2;
 
 // both
 const int PGM_BUFFER_SIZE = 1024;
-const std::string PGM_MULTICAST_ADDRESS = "224.0.12.136";
-const int DEFAULT_DATA_DESTINATION_PORT = 7500;
+const std::string PGM_MULTICAST_ADDRESS = "234.5.6.7";
+const int DEFAULT_DATA_DESTINATION_PORT = 5150;
 
 #endif // PGM_COMMON_H_
