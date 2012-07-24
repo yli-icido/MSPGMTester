@@ -238,7 +238,7 @@ int PGMReceiver::connect()
     do
     {
         SOCKADDR_IN   salocal, sasession;
-        int           sasessionsz, dwSessionPort;
+        int           sasessionsz;
 
         SOCKET s = socket (AF_INET, SOCK_RDM, IPPROTO_RM);
         if ( s == INVALID_SOCKET )
@@ -251,9 +251,8 @@ int PGMReceiver::connect()
         // The bind port (dwSessionPort) specified should match that
         // which the sender specified in the connect call
         //
-        dwSessionPort = 0;
         salocal.sin_family = AF_INET;
-        salocal.sin_port   = htons (dwSessionPort);    
+        salocal.sin_port   = htons( mPort );    
         salocal.sin_addr.s_addr = inet_addr( PGM_MULTICAST_ADDRESS.c_str() );
         int errCode = bind (s, (SOCKADDR *)&salocal, sizeof(salocal));
         if ( errCode == SOCKET_ERROR )

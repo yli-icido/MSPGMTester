@@ -16,6 +16,7 @@ public:
 
 private:
     int     initVar();
+    int     checkProtocols();
     void    usage();
     int     analyseOptions( std::string& options );
     int     verifyOptions( std::map< char, std::string >& options );
